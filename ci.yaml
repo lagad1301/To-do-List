@@ -1,0 +1,37 @@
+name: To-Do List CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Node.js (optional step, used for build or testing if required in the future)
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Install dependencies (this is a placeholder if you want to add npm later)
+      - name: Install dependencies
+        run: npm install
+
+      # Run tests (if you add tests later, you can add a test script)
+      - name: Run tests
+        run: npm test
+
+      # Deploy (this is a placeholder for future deployment, e.g., to GitHub Pages)
+      - name: Deploy Application
+        run: echo "Deploy step here"
+
+  # Optionally, you can add more jobs like linting, testing, etc.
