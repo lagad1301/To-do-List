@@ -1,0 +1,77 @@
+pipeline {
+    agent any  // Use any available agent for the pipeline
+
+    environment {
+        // Set any necessary environment variables here (e.g., Git credentials, Node version)
+        GIT_REPO_URL = 'https://github.com/lagad1301/To-do-List.git'
+        BRANCH = 'master'
+    }
+
+    stages {
+        // Stage 1: Checkout the code from GitHub
+        stage('Checkout') {
+            steps {
+                git branch: "${BRANCH}", url: "${GIT_REPO_URL}"
+            }
+        }
+
+        // Stage 2: Install Dependencies (Optional)
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // If you are using Node.js and have a package.json in the future, run npm install here
+                    echo 'No dependencies to install.'
+                    // Example for installing npm dependencies (if you have package.json):
+                    // sh 'npm install'
+                }
+            }
+        }
+
+        // Stage 3: Run Tests (Optional - Placeholder for future tests)
+        stage('Run Tests') {
+            steps {
+                script {
+                    echo 'No tests configured yet.'
+                    // Example for running tests (if you have Jest or Mocha tests in the future):
+                    // sh 'npm test'
+                }
+            }
+        }
+
+        // Stage 4: Deploy (Optional)
+        stage('Deploy to GitHub Pages') {
+            steps {
+                script {
+                    echo 'Deploying to GitHub Pages...'
+                    // If using GitHub Pages, you can use git commands to deploy the site
+                    // Example for GitHub Pages (using GitHub token stored in Jenkins credentials):
+                    sh '''
+                        git remote set-url origin https://github.com/yourusername/to-do-list.git
+                        git checkout -b gh-pages
+                        cp -R * .gitignore /path/to/gh-pages/folder/
+                        git add .
+                        git commit -m "Deploy to GitHub Pages"
+                        git push --force origin gh-pages
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up workspace after the build finishes
+            cleanWs()
+        }
+
+        success {
+            // Add success notification or message
+            echo 'Build and deployment were successful.'
+        }
+
+        failure {
+            // Handle failure (notify via email or any notification system)
+            echo 'Build failed!'
+        }
+    }
+}
